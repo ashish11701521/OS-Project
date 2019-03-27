@@ -25,4 +25,4 @@ void faculty_Queue(int no_of_process) {
         scanf("%d", &faculty_Process[count].burst_time);
         puts("");
     }
-}
+

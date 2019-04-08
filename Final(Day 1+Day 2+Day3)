@@ -1,253 +1,97 @@
 #include<stdio.h>
-#include<string.h>
-struct process_Struct
+int faculty_Queries;
+int student_Queries;
+struct faculty
 {
-    char process_name[20];
-    int arrival_time, burst_time, completion_time, remaining;
-}temp_Struct;
-void faculty_Queue(int no_of_process)
+    char faculty_name[10];
+    int faculty_time;
+}f[20];			//structure is created for faculty
+struct Student
 {
-    int count, arrival_Time, burst_Time, quantum_time;
-    struct process_Struct faculty_Process[no_of_process];
-    for(count = 0; count < no_of_process; count++) {
-        printf("Enter the details of Process[%d]", count+1);
-        puts("");
-        printf("Process Name : ");
-        scanf("%s", faculty_Process[count].process_name);
-        printf("Arrival Time : ");
-        scanf("%d", &faculty_Process[count].arrival_time);
-        printf("Burst Time : ");
-        scanf("%d", &faculty_Process[count].burst_time);
-        puts("");
-    }
-    printf("Enter the Quantum time for Faculty queue: ");
-    scanf("%d", &quantum_time);
-    // sorting the processes by their ARRIVAL time.
-    // if the ARRIVAL time is same then scheduling is based on FCFS.
-    for(count = 0; count < no_of_process; count++)
-    {
-        for(int x = count +1; x < count; x++)
-        {
-            if(faculty_Process[count].arrival_time > faculty_Process[x].arrival_time)
-            {
-                temp_Struct = faculty_Process[count];
-                faculty_Process[count] = faculty_Process[x];
-                faculty_Process[x] = temp_Struct;
-            }
-        }
-    }
-    // initialy all the burst time is remaining and completion of process is zero.
-    for(count = 0; count < no_of_process; count++)
-    {
-        faculty_Process[count].remaining = faculty_Process[count].burst_time;
-        faculty_Process[count].completion_time = 0;
-    }
-    int total_time, queue, round_robin[20];
-    total_time = 0;
-    queue = 0;
-    round_robin[queue] = 0;
-    int flag, x, n, z, waiting_time = 0;
-    do {
-        for(count = 0; count < no_of_process; count++)
-        {
-            if(total_time >= faculty_Process[count].arrival_time)
-            {
-                z = 0;
-                for(x = 0; x <= queue; x++)
-                {
-                    if(round_robin[x] == count)
-                    {
-                        z++;
-                    }
-                }
-                if(z == 0)
-                {
-                    queue++;
-                    round_robin[queue] == count;
-                }
-            }
-        }
-        if(queue == 0)
-        {
-            n = 0;
-        }
-        if(faculty_Process[n].remaining == 0)
-        {
-            n++ ;
-        }
-        if(n > queue)
-        {
-            n = (n - 1) % queue;
-        }
-        if(n <= queue)
-        {
-            if(faculty_Process[n].remaining > 0)
-            {
-                if(faculty_Process[n].remaining < quantum_time)
-                {
-                    total_time += faculty_Process[n].remaining;
-                    faculty_Process[n].remaining = 0;
-                }
-                else
-                {
-                    total_time += quantum_time;
-                    faculty_Process[n].remaining -= quantum_time;
-                }
-                faculty_Process[n].completion_time = total_time;
-            }
-            n++;
-        }
-        flag = 0;
-        for(count = 0; count < no_of_process; count++)
-        {
-            if(faculty_Process[count].remaining > 0)
-            {
-                flag++;
-            }
-        }
-    }while(flag != 0);
-    puts("\t\t\t*****  OUTPUT USING ROUND ROBIN ALGO   *****");
-    printf("\n|\tName of the Person\t  |\tArrival Time of Person\t  |\tBurst Time of Person\t  |\tCompletion Time  \t|\n");
-    for(count = 0; count < no_of_process; count++)
-    {
-        waiting_time = faculty_Process[count].completion_time - faculty_Process[count].burst_time - faculty_Process[count].arrival_time;
-        printf("\n|\t  %s\t    |\t  %d\t   |\t  %d\t   |\t  %d\t   |\n", faculty_Process[count].process_name, faculty_Process[count].arrival_time, faculty_Process[count].burst_time, faculty_Process[count].completion_time);
-    }
-}
-void student_Queue(int no_of_process)
+	char student_name[10];
+	int student_time;
+}s[20];		//strucutre is created for student
+void main()
 {
-    int count, arrival_Time, burst_Time, quantum_time;
-    struct process_Struct student_Process[no_of_process];
-    for(count = 0; count < no_of_process; count++)
-    {
-        printf("Enter the infomation of Process[%d]", count+1);
-        puts("");
-        printf("Process Name: ");
-        scanf("%s", student_Process[count].process_name);
-        printf("Arrival Time(When the Process is arrived): ");
-        scanf("%d", &student_Process[count].arrival_time);
-        printf("Burst Time(Time Taken to complete the query): ");
-        scanf("%d", &student_Process[count].burst_time);
-    }
-    printf("Enter the Quantum time for Student queue: ");
-    scanf("%d", &quantum_time);
-    // sorting the processes by their ARRIVAL time.
-    // if the ARRIVAL time is same then scheduling is based on FCFS.
-    for(count = 0; count < no_of_process; count++)
-    {
-        for(int x = count +1; x < count; x++)
-        {
-            if(student_Process[count].arrival_time > student_Process[x].arrival_time)
-            {
-                temp_Struct = student_Process[count];
-                student_Process[count] = student_Process[x];
-                student_Process[x] = temp_Struct;
-            }
-        }
-    }
-    // initialy all the burst time is remaining and completion of process is zero.
-    for(count = 0; count < no_of_process; count++)
-    {
-        student_Process[count].remaining = student_Process[count].burst_time;
-        student_Process[count].completion_time = 0;
-    }
-    int total_time, queue, round_robin[20];
-    total_time = 0;
-    queue = 0;
-    round_robin[queue] = 0;
-    int flag, x, n, z, waiting_time = 0;
-    do {
-        for(count = 0; count < no_of_process; count++)
-        {
-            if(total_time >= student_Process[count].arrival_time)
-            {
-                z = 0;
-                for(x = 0; x <= queue; x++)
-                {
-                    if(round_robin[x] == count)
-                    {
-                        z++;
-                    }
-                }
-                if(z == 0)
-                {
-                    queue++;
-                    round_robin[queue] == count;
-                }
-            }
-        }
-        if(queue == 0)
-        {
-            n = 0;
-        }
-        if(student_Process[n].remaining == 0)
-        {
-            n++ ;
-        }
-        if(n > queue)
-        {
-            n = (n - 1) % queue;
-        }
-        if(n <= queue)
-        {
-            if(student_Process[n].remaining > 0)
-            {
-                if(student_Process[n].remaining < quantum_time)
-                {
-                    total_time += student_Process[n].remaining;
-                    student_Process[n].remaining = 0;
-                }
-                else
-                {
-                    total_time += quantum_time;
-                    student_Process[n].remaining -= quantum_time;
-                }
-                student_Process[n].completion_time = total_time;
-            }
-            n++;
-        }
-        flag = 0;
-        for(count = 0; count < no_of_process; count++)
-        {
-            if(student_Process[count].remaining > 0)
-            {
-                flag++;
-            }
-        }
-    }while(flag != 0);
-    puts("\t\t\t*****  OUTPUT USING ROUND ROBIN ALGO   *****");
-    printf("\n|\tName of the Person\t|\tArrival Time of Person\t|\tBurst Time of Person\t|\tCompletion Time\t|\n");
-    for(count = 0; count < no_of_process; count++)
-    {
-        waiting_time = student_Process[count].completion_time - student_Process[count].burst_time - student_Process[count].arrival_time;
-        printf("\n|\t\t  %s\t    |\t  %d\t   |\t  %d\t   |\t  %d\t   |\n", student_Process[count].process_name, student_Process[count].arrival_time, student_Process[count].burst_time, student_Process[count].completion_time);
-    }
-}
-}
-int main(int argc, char const *argv[])
-{
-    int select_queue, no_of_process;
-    puts("Please select a queue: ");
-    puts("1. Faculty queue.");
-    puts("2. Student queue.");
-    printf("> ");
-    scanf("%d", &select_queue);
+    int i,f1,s1,t1=0,t2=60;
+  printf("---------------------------------------Welcome Sudesh Sharma--------------------------------------------\n");
+	printf("Number of Faculty requested for queries: ");  	//request for number of faculty requested for quries
+	scanf("%d",&faculty_Queries);
+	for(i=1;i<=faculty_Queries;i++)
+	{
+		printf("Enter name of faculty%d: ",i);
+		scanf("%s",&f[i].faculty_name);
+		printf("Enter time for faculty %d: ",i);			//time allocated for faculties
+		scanf("%d",&f[i].faculty_time);
+		printf("\n");
+	}
 
-    switch(select_queue)
-    {
-        case 1 :
-                printf("Enter no. of process for Faculty queue : ");
-                scanf("%d", &no_of_process);
-                faculty_Queue(no_of_process);
-                break;
-        case 2 :
-                printf("Enter no. of process for Student queue : ");
-                scanf("%d", &no_of_process);
-                student_Queue(no_of_process);
-                break;
-        default :
-                printf("Something Went Wrong");
-    }
-    return 0;
-}
+	printf("\n\n");
 
+	printf("Number of Students requested for queries: ");  	//request for number of students requested for quries
+	scanf("%d",&student_Queries);
+	for(i=1;i<=student_Queries;i++)
+	{
+		printf("Enter name of student%d: ",i);
+		scanf("%s",&s[i].student_name);
+		printf("Enter time for Student %d: ",i);			//time allocated for students
+		scanf("%d",&s[i].student_time);
+		printf("\n");
+	}
+
+	f1=60/faculty_Queries; 		//time will be sliced for faculty in given faculty
+	s1=60/student_Queries;		//time will be sliced for faculty in given student
+
+	printf("=========================================================================\n");
+	for(i=1;i<=faculty_Queries;i++)
+	{
+		if(f[i].faculty_time<f1)
+		{
+			t1=t1+f[i].faculty_time;
+			printf("\n The query is received for faculty name : %s for %d minutes ",f[i].faculty_name,f[i].faculty_time);	//it shows that message has received
+
+		}
+		else if(f[i].faculty_time=f1)
+		{
+			t1=t1+f1;
+			printf("\n The query is received for faculty name : %s for %d minutes ",f[i].faculty_name,f[i].faculty_time);	//it shows that message has received
+		}
+		else
+		{
+			t1=t1+f1;
+			printf("\n The query is not received for faculty name : %s ",f[i].faculty_name);	//it shows that message has not received
+
+		}
+	}
+
+	printf("\n\n");
+
+	for(i=1;i<=student_Queries;i++)
+	{
+		if(s[i].student_time<s1)
+		{
+			t2+=s[i].student_time;
+			printf("\n The query is received for Student name :%s for %d minutes ",s[i].student_name,s[i].student_time);	//it shows that message has received
+
+		}
+		else if(s[i].student_time=s1)
+		{
+			t2+=s1;
+			printf("\n The query is received for Student name :%s for %d minutes ",s[i].student_name,s[i].student_time); //it shows that message has received
+		}
+		else
+		{
+			t2+=s1;
+			printf("\n The query is not received for Student name :%s ",s[i].student_name); //it shows that message has not received
+		}
+	}
+
+    int	total=t1+t2-60;			//calculates the total querying time
+	float avg=total/(faculty_Queries+student_Queries);	//calculates the average waiting time
+	printf("\n\nTotal querying time = %d ",total);
+	printf("\nAverage querying time = %.2f ",avg);
+
+	printf("\n\nThe total time spent for query is %d",total);
+	printf("\n Average time spent for query is %.2f",avg);
+
+}
